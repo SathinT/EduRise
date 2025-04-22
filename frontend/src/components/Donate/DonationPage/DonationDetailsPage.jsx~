@@ -1,0 +1,177 @@
+import React, { useState, memo } from 'react'
+import { Button } from './Button.jsx'
+import { ArrowLeftIcon, UsersIcon, CalendarIcon } from 'lucide-react'
+
+export const DonationDetailsPage = ({ project, onBack }) => {
+    const [donationAmount, setDonationAmount] = useState('')
+    const [paymentMethod, setPaymentMethod] = useState('')
+    const [thankingOptions, setThankingOptions] = useState('')
+
+    const percentRaised = (project.raised / project.goal) * 100
+
+    const handleDonate = (e) => {
+        e.preventDefault()
+        alert(`Thank you for your donation of ${donationAmount}!`)
+    }
+
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <Button
+                variant="outline"
+                className="mb-6 flex items-center"
+                onClick={onBack}
+            >
+                <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                Back to Projects
+            </Button>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Project Details */}
+                <div className="lg:col-span-2">
+                    <div className="bg-gray-800 rounded-lg overflow-hidden">
+                        <img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-64 object-cover"
+                        />
+                        <div className="p-6">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h1 className="text-2xl font-bold">{project.title}</h1>
+                                    <h2 className="text-xl text-yellow-500">{project.subtitle}</h2>
+                                    <p className="text-gray-400 mt-1">
+                                        Held by {project.batches} Batches
+                                    </p>
+                                </div>
+                                <div className="bg-gray-700 px-3 py-1 rounded-full flex items-center">
+                                    <CalendarIcon className="w-4 h-4 mr-1 text-yellow-500" />
+                                    <span className="text-sm">{project.daysLeft} days left</span>
+                                </div>
+                            </div>
+
+                            {/* Progress Bar */}
+                            <div className="mt-6">
+                                <div className="flex justify-between text-sm mb-1">
+                                    <span>Raised: ${project.raised.toLocaleString()}</span>
+                                    <span>Goal: ${project.goal.toLocaleString()}</span>
+                                </div>
+                                <div className="w-full bg-gray-700 rounded-full h-2.5">
+                                    <div
+                                        className="bg-yellow-500 h-2.5 rounded-full"
+                                        style={{ width: `${percentRaised}%` }}
+                                    ></div>
+                                </div>
+                                <div className="flex items-center mt-2 text-sm text-gray-400">
+                                    <UsersIcon className="w-4 h-4 mr-1" />
+                                    <span>{project.donors} donors</span>
+                                </div>
+                            </div>
+
+                            {/* Description */}
+                            <div className="mt-6">
+                                <h3 className="text-lg font-medium mb-2">About This Project</h3>
+                                <p className="text-gray-300">
+                                    {project.description} The ABC Campus Graduation Day is a
+                                    celebration of academic achievement for our graduating
+                                    students. This event honors the hard work and dedication of
+                                    batches 72, 73, 74, and 75, marking their transition from
+                                    students to graduates ready to make a difference in the world.
+                                </p>
+                                <p className="text-gray-300 mt-4">
+                                    Your donation will help cover the costs of venue, ceremonial
+                                    items, photography, refreshments, and commemorative materials
+                                    for all graduates. Help us make this milestone event memorable
+                                    for our deserving students.
+                                </p>
+                            </div>
+
+                            {/* Additional Details */}
+                            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-gray-700 p-4 rounded-lg">
+                                    <h4 className="font-medium mb-2">Event Date</h4>
+                                    <p>June 15, 2024</p>
+                                </div>
+                                <div className="bg-gray-700 p-4 rounded-lg">
+                                    <h4 className="font-medium mb-2">Location</h4>
+                                    <p>ABC Campus Main Auditorium</p>
+                                </div>
+                                <div className="bg-gray-700 p-4 rounded-lg">
+                                    <h4 className="font-medium mb-2">Expected Attendees</h4>
+                                    <p>500+ students and family members</p>
+                                </div>
+                                <div className="bg-gray-700 p-4 rounded-lg">
+                                    <h4 className="font-medium mb-2">Organized By</h4>
+                                    <p>ABC Campus Alumni Association</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column: New Donation Form */}
+                <div className="lg:col-span-1">
+                    <div className="w-full bg-white rounded-lg py-12 px-4">
+                        <h2 className="text-3xl font-bold text-center mb-10 text-gray-900">
+                            Make Your Donation
+                        </h2>
+                        <div className="grid grid-cols-1 gap-8 bg-gray-900 p-8 rounded-lg">
+                            <div className="text-white">
+                                <div className="mb-8">
+                                    <h3 className="text-2xl font-bold">Organized By</h3>
+                                    <p className="text-yellow-400">
+                                        Arts Students Of University Of ABC
+                                    </p>
+                                </div>
+                                <div className="mb-8">
+                                    <h3 className="text-2xl font-bold">Event</h3>
+                                    <p className="text-yellow-400">{project.title}</p>
+                                    <p className="text-yellow-400">({project.subtitle})</p>
+                                </div>
+                                <div className="mb-8">
+                                    <h3 className="text-2xl font-bold">Goal</h3>
+                                    <p className="text-yellow-400">
+                                        ${project.goal.toLocaleString()}
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold">Achieved</h3>
+                                    <p className="text-yellow-400">{percentRaised.toFixed(0)}%</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col space-y-4">
+                                <input
+                                    type="text"
+                                    placeholder="Donation Amount"
+                                    value={donationAmount}
+                                    onChange={(e) => setDonationAmount(e.target.value)}
+                                    className="p-3 border rounded-md bg-white text-gray-900"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Payment Method"
+                                    value={paymentMethod}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="p-3 border rounded-md bg-white text-gray-900"
+                                />
+                                <textarea
+                                    placeholder="Any preferred thanking options"
+                                    value={thankingOptions}
+                                    onChange={(e) => setThankingOptions(e.target.value)}
+                                    className="p-3 border rounded-md h-32 bg-white text-gray-900"
+                                />
+                                <button
+                                    onClick={handleDonate}
+                                    className="bg-yellow-400 text-black py-2 px-6 rounded-md w-24 font-medium hover:bg-yellow-500 transition-colors"
+                                >
+                                    Donate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default DonationDetailsPage
