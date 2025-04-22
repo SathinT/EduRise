@@ -1,0 +1,128 @@
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import logo from '../../../assets/Home/Logo.png'
+import loginMask from '../../../assets/Auth/loginMask.png'
+import loginbg from '../../../assets/Auth/loginbg.png'
+
+export function Login({ onNavigate }) {
+    const [formData, setFormData] = useState({ email: '', password: '' })
+    const [errors, setErrors] = useState({})
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+        setErrors({ ...errors, [e.target.name]: '' })
+    }
+
+    const validate = () => {
+        const newErrors = {}
+        if (!formData.email) newErrors.email = 'Email is required'
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format'
+        if (!formData.password) newErrors.password = 'Password is required'
+        return newErrors
+    }
+
+    const handleSubmit = () => {
+        const validationErrors = validate()
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors)
+            return
+        }
+
+        setIsSubmitting(true)
+        // Simulate async login
+        setTimeout(() => {
+            setIsSubmitting(false)
+            onNavigate('document')
+        }, 1000)
+    }
+
+    return (
+        <div className="w-full h-screen flex">
+            <div className="w-3/5 h-full bg-[#1E1E1E] p-8 pl-36 pr-36 flex flex-col relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-70">
+                    <img src={loginMask} alt="Globe" className="w-64 h-64" />
+                </div>
+                <div
+                    className="h-12 w-50 bg-contain bg-no-repeat"
+                    style={{ backgroundImage: `url(${logo})` }}
+                ></div>
+
+                <motion.div
+                    className="mt-20"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                >
+                    <h1 className="text-yellow-500 text-4xl font-bold border-b-4 border-yellow-500 pb-1 inline-block">
+                        LOGIN
+                    </h1>
+
+                    <div className="mt-16 space-y-4">
+                        <div>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="p-3 rounded bg-white text-gray-800 w-full"
+                            />
+                            {errors.email && (
+                                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="p-3 rounded bg-white text-gray-800 w-full"
+                            />
+                            {errors.password && (
+                                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                            )}
+                        </div>
+
+                        <div className="pt-4">
+                            <button
+                                className="bg-yellow-500 text-black font-semibold py-2 px-10 rounded w-full"
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Logging in...' : 'Login'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="mt-16 flex items-center">
+                        <div className="flex-grow h-px bg-gray-600"></div>
+                        <div className="mx-4 text-gray-400">or</div>
+                        <div className="flex-grow h-px bg-gray-600"></div>
+                    </div>
+
+                    <div className="mt-8 flex justify-center">
+                        <button className="border border-yellow-500 text-white py-2 px-4 rounded-full flex items-center">
+                            <img
+                                src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
+                                alt="Google"
+                                className="w-5 h-5 mr-2"
+                            />
+                            Sign in with Google
+                        </button>
+                    </div>
+                </motion.div>
+            </div>
+
+            <div
+                className="w-2/5 h-full bg-cover bg-center"
+                style={{ backgroundImage: `url(${loginbg})` }}
+            ></div>
+        </div>
+    )
+}
+
+export default Login
