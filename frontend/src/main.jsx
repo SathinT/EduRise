@@ -34,7 +34,7 @@ createRoot(document.getElementById('root')).render(
 
                 <Route path="/adminDashboard" element={<AdminDashboard />} />
                 <Route path="/studentDashboard" element={<StudentInterface />} />
-                <Route path="donorDashboard" element={<DonorInterface />} />
+                <Route path="/donorDashboard" element={<DonorInterface />} />
 
             </Routes>
         </BrowserRouter>
