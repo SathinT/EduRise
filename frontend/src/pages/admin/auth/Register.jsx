@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import logo from '../../../assets/Home/Logo.png';
 import loginMask from "../../../assets/Auth/loginMask.png";
 import registerbg from "../../../assets/Auth/registerbg.png";
+import Login from "./Login.jsx";
 
 export function Register({ onNavigate }) {
     const [formData, setFormData] = useState({
@@ -13,6 +15,8 @@ export function Register({ onNavigate }) {
         email: '',
         password: ''
     });
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,6 +29,18 @@ export function Register({ onNavigate }) {
             alert('Please fill all the fields.');
             return;
         }
+        if (email === "test@example.com") {
+            alert("Email is already registered.");
+            return;
+        }
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            alert("Invalid email format.");
+            return;
+        }
+
+        const navigate = useNavigate();
+
+
 
         // Here you would typically call an API to register the user
         console.log('Registering:', formData);
@@ -140,6 +156,8 @@ export function Register({ onNavigate }) {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             className="border border-yellow-500 text-white py-2 px-4 rounded-full flex items-center hover:bg-yellow-600 hover:text-black transition"
+                            onClick={() => alert("Google Sign-In coming soon!")}
+
                         >
                             <img
                             src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
@@ -150,6 +168,16 @@ export function Register({ onNavigate }) {
                         </motion.button>
                     </div>
                 </motion.div>
+                <p className="text-gray-400 text-sm mt-6">
+                    Already have an account?{" "}
+                    <button
+                        className="text-yellow-500 hover:underline cursor-pointer"
+                        onClick={() => navigate('/login')}
+                    >
+                        Login here
+                    </button>
+                </p>
+
             </div>
 
             {/* Right Background */}

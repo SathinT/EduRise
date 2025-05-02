@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import logo from '../../../assets/Home/Logo.png'
 import loginMask from '../../../assets/Auth/loginMask.png'
 import loginbg from '../../../assets/Auth/loginbg.png'
+import Register from "./Register.jsx";
 
 export function Login({ onNavigate }) {
     const [formData, setFormData] = useState({ email: '', password: '' })
@@ -36,6 +37,8 @@ export function Login({ onNavigate }) {
             onNavigate('document')
         }, 1000)
     }
+
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className="w-full h-screen flex">
@@ -73,15 +76,23 @@ export function Login({ onNavigate }) {
                             )}
                         </div>
 
-                        <div>
+                        <div className="p-3 rounded bg-white w-full justify-between flex">
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 name="password"
-                                placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="p-3 rounded bg-white text-gray-800 w-full"
+                                placeholder="Password"
+                                className="text-gray-800"
                             />
+                            <button
+                                type="button"
+                                className="text-sm text-yellow-500 ml-2"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+
                             {errors.password && (
                                 <p className="text-red-500 text-sm mt-1">{errors.password}</p>
                             )}
@@ -115,6 +126,16 @@ export function Login({ onNavigate }) {
                         </button>
                     </div>
                 </motion.div>
+                <p className="text-gray-400 text-sm mt-6">
+                    Don’t have an account?{" "}
+                    <span
+                        className="text-yellow-500 hover:underline cursor-pointer"
+                        onClick={() => onNavigate('register')}
+                    >
+        Register here
+    </span>
+                </p>
+
             </div>
 
             <div
