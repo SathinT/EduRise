@@ -25,7 +25,7 @@ export default function DonationCard({ imageUrl, title, heldBy, campusName }) {
                     <Link to="/donationDetails" className="bg-gray-600 text-white text-sm py-1 px-3 rounded hover:bg-gray-500">
                         View More
                     </Link>
-                    <Link to="/donation" className="bg-yellow-400 text-gray-900 text-sm py-1 px-3 rounded font-medium hover:bg-yellow-300">
+                    <Link to="/register" className="bg-yellow-400 text-gray-900 text-sm py-1 px-3 rounded font-medium hover:bg-yellow-300">
                         Donate Now
                     </Link>
                 </div>

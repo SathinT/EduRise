@@ -1,42 +1,78 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import logo from '../../../assets/Home/Logo.png'
-import loginMask from '../../../assets/Auth/loginMask.png'
-import loginbg from '../../../assets/Auth/loginbg.png'
-import Register from "./Register.jsx";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import logo from '../../../assets/Home/Logo.png';
+import loginMask from '../../../assets/Auth/loginMask.png';
+import loginbg from '../../../assets/Auth/loginbg.png';
+import { useNavigate } from 'react-router-dom';  // Make sure you have the navigation
 
 export function Login({ onNavigate }) {
-    const [formData, setFormData] = useState({ email: '', password: '' })
-    const [errors, setErrors] = useState({})
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(''); // Store error messages
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-        setErrors({ ...errors, [e.target.name]: '' })
-    }
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setErrors({ ...errors, [e.target.name]: '' });
+    };
 
     const validate = () => {
-        const newErrors = {}
-        if (!formData.email) newErrors.email = 'Email is required'
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format'
-        if (!formData.password) newErrors.password = 'Password is required'
-        return newErrors
-    }
+        const newErrors = {};
+        if (!formData.email) newErrors.email = 'Email is required';
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format';
+        if (!formData.password) newErrors.password = 'Password is required';
+        return newErrors;
+    };
 
-    const handleSubmit = () => {
-        const validationErrors = validate()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors)
-            return
+            setErrors(validationErrors);
+            return;
         }
 
-        setIsSubmitting(true)
-        // Simulate async login
-        setTimeout(() => {
-            setIsSubmitting(false)
-            onNavigate('document')
-        }, 1000)
-    }
+        setIsSubmitting(true);
+
+        try {
+            const res = await fetch('http://localhost:5000/api/users/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.email, password: formData.password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Save the token and user data
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user)); // Save the user data (role included)
+
+                const role = data.user.role; // Get the role from the response
+
+                // Navigate based on role
+                if (role === 'admin') {
+                    navigate('/adminDashboard'); // Admin Dashboard path
+                } else if (role === 'student') {
+                    navigate('/studentDashboard'); // Student Dashboard path
+                } else if (role === 'donor') {
+                    navigate('/donorDashboard'); // Donor Dashboard path
+                } else {
+                    setErrorMessage('Unknown user role');
+                }
+            } else {
+                setErrorMessage(data.message || 'Something went wrong');
+            }
+        } catch (error) {
+            setErrorMessage('Network error, please try again later.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -46,10 +82,7 @@ export function Login({ onNavigate }) {
                 <div className="absolute top-0 right-0 opacity-70">
                     <img src={loginMask} alt="Globe" className="w-64 h-64" />
                 </div>
-                <div
-                    className="h-12 w-50 bg-contain bg-no-repeat"
-                    style={{ backgroundImage: `url(${logo})` }}
-                ></div>
+                <div className="h-12 w-50 bg-contain bg-no-repeat" style={{ backgroundImage: `url(${logo})` }}></div>
 
                 <motion.div
                     className="mt-20"
@@ -57,9 +90,7 @@ export function Login({ onNavigate }) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h1 className="text-yellow-500 text-4xl font-bold border-b-4 border-yellow-500 pb-1 inline-block">
-                        LOGIN
-                    </h1>
+                    <h1 className="text-yellow-500 text-4xl font-bold border-b-4 border-yellow-500 pb-1 inline-block">LOGIN</h1>
 
                     <div className="mt-16 space-y-4">
                         <div>
@@ -71,9 +102,7 @@ export function Login({ onNavigate }) {
                                 onChange={handleChange}
                                 className="p-3 rounded bg-white text-gray-800 w-full"
                             />
-                            {errors.email && (
-                                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                            )}
+                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                         </div>
 
                         <div className="p-3 rounded bg-white w-full justify-between flex">
@@ -93,10 +122,10 @@ export function Login({ onNavigate }) {
                                 {showPassword ? "Hide" : "Show"}
                             </button>
 
-                            {errors.password && (
-                                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-                            )}
+                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                         </div>
+
+                        {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
 
                         <div className="pt-4">
                             <button
@@ -126,16 +155,16 @@ export function Login({ onNavigate }) {
                         </button>
                     </div>
                 </motion.div>
+
                 <p className="text-gray-400 text-sm mt-6">
                     Don’t have an account?{" "}
                     <span
                         className="text-yellow-500 hover:underline cursor-pointer"
-                        onClick={() => onNavigate('register')}
+                        onClick={() => navigate('/register')}
                     >
-        Register here
-    </span>
+                        Register here
+                    </span>
                 </p>
-
             </div>
 
             <div
@@ -143,7 +172,7 @@ export function Login({ onNavigate }) {
                 style={{ backgroundImage: `url(${loginbg})` }}
             ></div>
         </div>
-    )
+    );
 }
 
-export default Login
+export default Login;

@@ -9,6 +9,8 @@ const router = express.Router();
 // Register route
 router.post("/register", async (req, res) => {
     try {
+        console.log("👉 Received request body:", req.body);
+
         const { fullName, email, phone, password, role } = req.body;
 
         // check for required fields

@@ -7,6 +7,7 @@ import registerbg from "../../../assets/Auth/registerbg.png";
 import Login from "./Login.jsx";
 
 export function Register({ onNavigate }) {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -23,30 +24,46 @@ export function Register({ onNavigate }) {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         const { firstName, lastName, role, contact, email, password } = formData;
+
         if (!firstName || !lastName || !role || !contact || !email || !password) {
             alert('Please fill all the fields.');
             return;
         }
-        if (email === "test@example.com") {
-            alert("Email is already registered.");
-            return;
-        }
+
         if (!/\S+@\S+\.\S+/.test(email)) {
             alert("Invalid email format.");
             return;
         }
 
-        const navigate = useNavigate();
+        try {
+            const response = await fetch("http://localhost:5000/api/users/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    fullName: `${firstName} ${lastName}`,
+                    email,
+                    phone: contact,
+                    password,
+                    role
+                })
+            });
 
+            const data = await response.json();
 
-
-        // Here you would typically call an API to register the user
-        console.log('Registering:', formData);
-        alert('Registration Successful!');
-        onNavigate('login');
+            if (response.ok) {
+                alert("🎉 Registration successful!");
+                navigate("/login");
+            } else {
+                alert(`❌ ${data.message || "Registration failed"}`);
+            }
+        } catch (error) {
+            console.error("Register error:", error);
+            alert("Something went wrong!");
+        }
     };
+
 
     return (
         <div className="w-full h-screen flex">
@@ -101,9 +118,9 @@ export function Register({ onNavigate }) {
                                 className="p-3 rounded bg-white text-gray-800 w-full"
                             >
                                 <option value="">Select Role</option>
-                                <option value="Teacher">Teacher</option>
-                                <option value="Student">Student</option>
-                                <option value="Parent">Parent</option>
+                                <option value="donor">Donor</option>
+                                <option value="student">Student</option>
+                                {/*<option value="admin">Admin</option>*/}
                             </select>
                             <input
                                 type="text"

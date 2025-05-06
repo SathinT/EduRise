@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import mainbg from '../assets/Home/mainbg.png'
 const Hero = () => {
+    const navigate = useNavigate();
     return (
         <section className="relative bg-gray-900 text-white">
             <section
@@ -18,9 +20,13 @@ const Hero = () => {
                         Better Future For the Next Gen Of Scholars.
                     </p>
                     <div className="flex flex-wrap gap-4">
-                        <button className="bg-white text-gray-900 hover:bg-gray-100 py-2 px-6 rounded-md font-medium">
+                        <button
+                            className="bg-white text-gray-900 hover:bg-gray-100 py-2 px-6 rounded-md font-medium"
+                            onClick={() => navigate('/register')}
+                        >
                             Register
                         </button>
+
                         <button className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 py-2 px-6 rounded-md font-medium">
                             Donate Now
                         </button>

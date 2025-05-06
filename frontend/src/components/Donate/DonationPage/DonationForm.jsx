@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const DonationForm = () => {
     const organizer = 'Arts Students Of University Of ABC';
@@ -6,6 +8,9 @@ const DonationForm = () => {
     const eventType = 'Musical Event';
     const goalAmount = 'Lkr. 80,000.00/=';
     const achievedPercentage = '60%';
+
+    const navigate = useNavigate();
+
 
     return (
         <div className="w-full mb-10">
@@ -51,7 +56,8 @@ const DonationForm = () => {
                         placeholder="Any preferred thanking options"
                         className="p-3 border border-yellow-400 bg-white text-black rounded-md h-32 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
-                    <button className="bg-yellow-400 text-black py-2 px-6 rounded-md w-24 font-medium hover:bg-yellow-300">
+                    <button className="bg-yellow-400 text-black py-2 px-6 rounded-md w-24 font-medium hover:bg-yellow-300"
+                            onClick={() => navigate('/register')}>
                         Donate
                     </button>
                 </div>
