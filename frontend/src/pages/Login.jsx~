@@ -1,0 +1,70 @@
+import React from 'react'
+import logo from '../assets/Home/Logo.png'
+import loginMask from '../assets/Auth/loginMask.png'
+import loginbg from '../assets/Auth/loginbg.png'
+
+export function Login({ onNavigate }) {
+    return (
+        <div className="w-full h-screen flex">
+            <div className="w-3/5 h-full bg-[#1E1E1E] p-8 pl-30 pr-36 flex flex-col relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-70">
+                    <img
+                        src={loginMask}
+                        alt="Globe"
+                        className="w-64 h-64"
+                    />
+                </div>
+                <div className="h-12 w-50 bg-contain bg-no-repeat"
+                     style={{ backgroundImage: `url(${logo})` }}>
+                </div>
+                <div className="mt-20">
+                    <h1 className="text-yellow-500 text-4xl font-bold border-b-4 border-yellow-500 pb-1 inline-block">
+                        LOGIN
+                    </h1>
+                    <div className="mt-16 space-y-4">
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            className="p-3 rounded bg-white text-gray-800 w-full"
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="p-3 rounded bg-white text-gray-800 w-full"
+                        />
+                        <div className="pt-4">
+                            <button
+                                className="bg-yellow-500 text-black font-semibold py-2 px-10 rounded"
+                                onClick={() => onNavigate('document')}
+                            >
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                    <div className="mt-16 flex items-center">
+                        <div className="flex-grow h-px bg-gray-600"></div>
+                        <div className="mx-4 text-gray-400">or</div>
+                        <div className="flex-grow h-px bg-gray-600"></div>
+                    </div>
+                    <div className="mt-8 flex justify-center">
+                        <button className="border border-yellow-500 text-white py-2 px-4 rounded-full flex items-center">
+                            <img
+                                src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
+                                alt="Google"
+                                className="w-6 h-6 mr-2"
+                            />
+                            Sign in with Google
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                className="w-2/5 h-full bg-cover bg-center"
+                style={{ backgroundImage: `url(${loginbg})` }}>
+            </div>
+        </div>
+    )
+}
+
+export default Login
